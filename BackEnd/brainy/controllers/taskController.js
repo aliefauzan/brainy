@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid');
 
 // Buat task baru
 const createTask = async (req, res) => {
-  const { category, dueDate, title, userId } = req.body;
+  const { category, dueDate, title, userId, desc } = req.body;
 
   const taskId = nanoid(15).toUpperCase();
   if (!category || !title || !userId) {
@@ -17,6 +17,7 @@ const createTask = async (req, res) => {
     title,
     category,
     dueDate,
+    desc,
     createdAt: new Date().toISOString(),
   });
   const taskDoc = await taskRef.get();
@@ -99,7 +100,7 @@ const getTaskById = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-    const { category, dueDate, title, userId } = req.body;
+    const { category, dueDate, title, userId, desc } = req.body;
 
     if (!taskId) {
       return res.status(400).json({ message: 'taskId parameter is required' });
@@ -122,6 +123,7 @@ const updateTask = async (req, res) => {
       dueDate,
       title,
       userId,
+      desc,
       updatedAt: new Date().toISOString()
     });
 
