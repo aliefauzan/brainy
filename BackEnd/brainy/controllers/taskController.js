@@ -28,7 +28,11 @@ const createTask = async (req, res) => {
 const getAllTask = async (req, res) => {
   const { userId } = req.params;
 
-  const snapshot = await db.collection('task').where('userId', '==', userId).get();
+  const snapshot = await db
+  .collection('task')
+  .where('userId', '==', userId)
+  .orderBy('createdAt', 'desc')
+  .get();
 
   if (snapshot.empty) {
     return res.status(200).json({ tasks: [] });
@@ -51,7 +55,7 @@ const getTaskByCategory = async (req, res) => {
       return res.status(400).json({ message: 'Category parameter is required' });
     }
 
-    const snapshot = await db.collection('task').where('category', '==', category).get();
+    const snapshot = await db.collection('task').where('category', '==', category).orderBy('createdAt', 'desc').get();
 
     if (snapshot.empty) {
       return res.status(404).json({ message: 'No tasks found for this category' });
@@ -78,7 +82,7 @@ const getTaskById = async (req, res) => {
       return res.status(400).json({ message: 'taskId parameter is required' });
     }
 
-    const snapshot = await db.collection('task').where('taskId', '==', taskId).get();
+    const snapshot = await db.collection('task').where('taskId', '==', taskId).orderBy('createdAt', 'desc').get();
 
     if (snapshot.empty) {
       return res.status(404).json({ message: 'No tasks found for this taskId' });
@@ -124,7 +128,7 @@ const updateTask = async (req, res) => {
       title,
       userId,
       desc,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     });
 
     res.status(200).json({ message: 'Task updated successfully', ...taskDoc.data() });
