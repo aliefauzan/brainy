@@ -46,19 +46,27 @@ const getAllTask = async (req, res) => {
   res.status(200).json({ tasks });
 };
 
-// Ambil task berdasarkan category
+// Ambil semua task berdasarkan category
 const getTaskByCategory = async (req, res) => {
   try {
-    const { category } = req.params;
+    const { userId, category } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID parameter is required' });
+    }
 
     if (!category) {
       return res.status(400).json({ message: 'Category parameter is required' });
     }
 
-    const snapshot = await db.collection('task').where('category', '==', category).orderBy('createdAt', 'desc').get();
+    const snapshot = await db.collection('task')
+      .where('userId', '==', userId)
+      .where('category', '==', category)
+      .orderBy('createdAt', 'desc')
+      .get();
 
     if (snapshot.empty) {
-      return res.status(404).json({ message: 'No tasks found for this category' });
+      return res.status(200).json({ tasks: [] });
     }
 
     const tasks = snapshot.docs.map(doc => ({

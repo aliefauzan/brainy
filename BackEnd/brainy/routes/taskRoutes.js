@@ -18,8 +18,7 @@ router.post('/', protectRoute, asyncHandler(createTask)); //done
 // Ambil semua task milik user
 router.get('/user/:userId', protectRoute, asyncHandler(getAllTask)); //done
 
-// Ambil task berdasarkan kategori
-router.get('/category/:category', protectRoute, asyncHandler(getTaskByCategory)); //done
+router.get('/category/:userId/:category', protectRoute, asyncHandler(getTaskByCategory)); //done
 
 // Ambil task berdasarkan ID
 router.get('/id/:taskId', protectRoute, asyncHandler(getTaskById)); //done
